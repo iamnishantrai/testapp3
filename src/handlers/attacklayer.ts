@@ -1,24 +1,16 @@
 //import Store from '../posts_store';
 
 export interface Env {
-	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-	// MY_KV_NAMESPACE: KVNamespace;
-	//PopularDomainsKV: KVNamespace
-	//
-	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-	// MY_DURABLE_OBJECT: DurableObjectNamespace;
-	//
-	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-	// MY_BUCKET: R2Bucket;
+	ATTACKLAYER: KVNamespace
 }
 
 const AttackLayer3Source = "https://raw.githubusercontent.com/lauragift21/hiring-submission-data/main/attack-layer3-traffic.csv";
 
-const AttackLayer3SourceData = async () => {
-    return await fetchCSVBasedOnURL(AttackLayer3Source);
+const AttackLayer3SourceData = async (request: Request, env: Env, ctx: ExecutionContext) => {
+    return await fetchCSVBasedOnURL(AttackLayer3Source, request, env, ctx);
 };
 
-async function fetchCSVBasedOnURL(url: string): Promise<Response> {
+async function fetchCSVBasedOnURL(url: string, request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 
     const init = {
         method: 'GET',
@@ -27,7 +19,7 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
         },
       }
 
-        var finalresp = null;
+      var finalresp: string = "";
 
         const headers = {
             'Access-Control-Allow-Origin': '*',
@@ -59,6 +51,8 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
             }
 
             finalresp =  JSON.stringify(result);
+
+            env.ATTACKLAYER.put(Date.now().toString(), finalresp);
         });
 
         return new Response(finalresp, {headers});

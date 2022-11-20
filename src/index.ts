@@ -16,7 +16,8 @@ import { handleRequest } from "./handler";
 export interface Env {
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
 	// MY_KV_NAMESPACE: KVNamespace
-	//
+	TRAFFICCHANGE: KVNamespace
+
 	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
 	// MY_DURABLE_OBJECT: DurableObjectNamespace
 	//
@@ -32,6 +33,6 @@ export default {
 	): Promise<Response> {
 		//return new Response(`Hello World from ${request.method}!`);
 
-		return await handleRequest(request);
+		return await handleRequest(request, env, ctx);
 	},
 };

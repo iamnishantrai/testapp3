@@ -1,25 +1,16 @@
 //import Store from '../posts_store';
 
 export interface Env {
-	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-	// MY_KV_NAMESPACE: KVNamespace;
-	//PopularDomainsKV: KVNamespace
-	//
-	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-	// MY_DURABLE_OBJECT: DurableObjectNamespace;
-	//
-	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-	// MY_BUCKET: R2Bucket;
+	POPULARDOMAINS: KVNamespace
 }
 
 const PopularDomainsSource = "https://raw.githubusercontent.com/lauragift21/hiring-submission-data/main/top-domain.csv";
 
-const PopularDomainsSourceData = async () => {
-    return await fetchCSVBasedOnURL(PopularDomainsSource);
+const PopularDomainsSourceData = async (request: Request, env: Env, ctx: ExecutionContext) => {
+    return await fetchCSVBasedOnURL(PopularDomainsSource, request, env, ctx);
 };
 
-async function fetchCSVBasedOnURL(url: string): Promise<Response> {
-
+async function fetchCSVBasedOnURL(url: string, request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const headers = {
         'Access-Control-Allow-Origin': '*',
         'Content-type': 'application/json',
@@ -32,7 +23,7 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
         },
       }
 
-        var finalresp = null;
+      var finalresp: string = "";
 
         const response = await fetch(PopularDomainsSource, init).then(res => res.text()).then(d => {
                 var lines = d.split("\n");
@@ -64,6 +55,8 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
                 finalresp =  JSON.stringify(finalResult);
             });
         
+        env.POPULARDOMAINS.put(Date.now().toString(), finalresp);
+
         return new Response(finalresp, {headers});
 }
 

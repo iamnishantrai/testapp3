@@ -4,3 +4,8 @@ name = "worker-typescript-template"
 compatibility_date = "2022-07-26"
 type="webpack"
 workers_dev = true
+kv_namespaces = [
+    { binding = "TRAFFICCHANGE", id = "b17a5215f2934315a029255cf0434d9b", preview_id = "6612a11714fa45aa8d3053a627ca6528" },
+    { binding = "ATTACKLAYER", id = "7a0060306334417aa3007b74cdde7d4c", preview_id = "f7f35186c7d942eb8b9aaee57d43c829" },
+    { binding = "POPULARDOMAINS", id = "ebbb6f2ed83f40fbb6049fc0051c196b", preview_id = "d1628ace62984468a0ccf89726348e67" }
+]

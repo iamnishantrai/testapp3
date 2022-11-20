@@ -1,24 +1,16 @@
 //import Store from '../posts_store';
 
 export interface Env {
-	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-	// MY_KV_NAMESPACE: KVNamespace;
-	//PopularDomainsKV: KVNamespace
-	//
-	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-	// MY_DURABLE_OBJECT: DurableObjectNamespace;
-	//
-	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-	// MY_BUCKET: R2Bucket;
+  TRAFFICCHANGE: KVNamespace
 }
 
 const TrafficChangeSource = "https://raw.githubusercontent.com/lauragift21/hiring-submission-data/main/internet-traffic.csv";
 
-const TrafficChangeSourceData = async () => {
-    return await fetchCSVBasedOnURL(TrafficChangeSource);
+const TrafficChangeSourceData = async (request: Request, env: Env, ctx: ExecutionContext) => {
+    return await fetchCSVBasedOnURL(TrafficChangeSource, request, env, ctx);
 };
 
-async function fetchCSVBasedOnURL(url: string): Promise<Response> {
+async function fetchCSVBasedOnURL(url: string, request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 
     console.log("traffic change log - " + url.toString());
 
@@ -34,7 +26,7 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
         },
       }
 
-      var finalresp = null;
+      var finalresp: string = "";
 
         const response = await fetch(TrafficChangeSource, init).then(res => res.text()).then(d => {
             var lines = d.split("\n");
@@ -63,6 +55,8 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
 
             finalresp =  JSON.stringify(result);
         });
+
+        env.TRAFFICCHANGE.put(Date.now().toString(), finalresp);
 
         return new Response(finalresp, {headers});
 }

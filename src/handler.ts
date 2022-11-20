@@ -1,4 +1,5 @@
 import { Router } from 'itty-router';
+import { Env } from '.';
 
 import AttackLayer3SourceData from './handlers/attacklayer';
 import PopularDomainsSourceData from './handlers/populardomains';
@@ -11,4 +12,4 @@ router
 .get('/attack-layer3', AttackLayer3SourceData)
 .get('*', () => new Response('Unsupported end point', { status: 404 }));
 
-export const handleRequest = request => router.handle(request);
+export const handleRequest = (request: Request, env: Env, ctx: ExecutionContext) => router.handle(request, env, ctx);
