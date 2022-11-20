@@ -3,6 +3,19 @@ import { Link } from '@reach/router';
 import logo from '../logo.svg';
 
 const TrafficChangeData = () => {
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const getPosts = async () => {
+      const resp = await fetch('https://worker-typescript-template.nishant-2010rai.workers.dev/traffic-change');
+      const postsResp = await resp.json();
+      setPosts(postsResp);
+    };
+
+    getPosts();
+  }, []);
+
   return (
     <div>
         <div className="App">
@@ -14,6 +27,7 @@ const TrafficChangeData = () => {
                 <h1>
                 See the Traffic Change Data
                 </h1>
+                <pre>{ JSON.stringify(posts, null, 2) }</pre>
             </header>
         </div>
     </div>

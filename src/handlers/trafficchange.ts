@@ -22,6 +22,11 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
 
     console.log("traffic change log - " + url.toString());
 
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Content-type': 'application/json',
+      };
+
     const init = {
         method: 'GET',
         headers: {
@@ -59,7 +64,7 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
             finalresp =  JSON.stringify(result);
         });
 
-        return new Response(finalresp);
+        return new Response(finalresp, {headers});
 }
 
 export default TrafficChangeSourceData;

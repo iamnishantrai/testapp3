@@ -29,6 +29,11 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
 
         var finalresp = null;
 
+        const headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Content-type': 'application/json',
+          };
+
         const response = await fetch(AttackLayer3Source, init).then(res => res.text()).then(d => {
             var lines = d.split("\n");
 
@@ -56,7 +61,7 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
             finalresp =  JSON.stringify(result);
         });
 
-        return new Response(finalresp);
+        return new Response(finalresp, {headers});
 }
 
 export default AttackLayer3SourceData;

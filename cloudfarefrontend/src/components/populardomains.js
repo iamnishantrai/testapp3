@@ -3,6 +3,19 @@ import { Link } from '@reach/router';
 import logo from '../logo.svg';
 
 const PopularDomainsData = () => {
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const getPosts = async () => {
+      const resp = await fetch('https://worker-typescript-template.nishant-2010rai.workers.dev/popular-domains');
+      const postsResp = await resp.json();
+      setPosts(postsResp);
+    };
+
+    getPosts();
+  }, []);
+
   return (
     <div>
         <div className="App">
@@ -14,6 +27,7 @@ const PopularDomainsData = () => {
                 <h1>
                 See the Popular Domains Data
                 </h1>
+                <pre>{ JSON.stringify(posts, null, 2) }</pre>
             </header>
         </div>
     </div>

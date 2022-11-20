@@ -20,6 +20,11 @@ const PopularDomainsSourceData = async () => {
 
 async function fetchCSVBasedOnURL(url: string): Promise<Response> {
 
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Content-type': 'application/json',
+      };
+
     const init = {
         method: 'GET',
         headers: {
@@ -59,7 +64,7 @@ async function fetchCSVBasedOnURL(url: string): Promise<Response> {
                 finalresp =  JSON.stringify(finalResult);
             });
         
-        return new Response(finalresp);
+        return new Response(finalresp, {headers});
 }
 
 export default PopularDomainsSourceData;
