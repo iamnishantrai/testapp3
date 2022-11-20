@@ -11,6 +11,8 @@
 // These initial Types are based on bindings that don't exist in the project yet,
 // you can follow the links to learn how to implement them.
 
+import { handleRequest } from "./handler";
+
 export interface Env {
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
 	// MY_KV_NAMESPACE: KVNamespace
@@ -22,12 +24,14 @@ export interface Env {
 	// MY_BUCKET: R2Bucket
 }
 
-export const worker = {
+export default {
 	async fetch(
 		request: Request,
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<Response> {
-		return new Response(`Hello World from ${request.method}!`);
+		//return new Response(`Hello World from ${request.method}!`);
+
+		return await handleRequest(request);
 	},
 };
