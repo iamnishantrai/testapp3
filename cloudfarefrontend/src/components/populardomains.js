@@ -10,7 +10,7 @@ const PopularDomainsData = () => {
     const getPosts = async () => {
       const resp = await fetch('https://worker-typescript-template.nishant-2010rai.workers.dev/popular-domains');
       const postsResp = await resp.json();
-      setPosts(postsResp);
+      setPosts(postsResp.rankingEntries);
     };
 
     getPosts();
@@ -27,7 +27,22 @@ const PopularDomainsData = () => {
                 <h1>
                 See the Popular Domains Data
                 </h1>
-                <pre>{ JSON.stringify(posts, null, 2) }</pre>
+                <tbody>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Rank Change</th>
+                    <th>Domain</th>
+                    <th>Category</th>
+                  </tr>
+                  {posts.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.rank}</td>
+                      <td>{item.rankChange}</td>
+                      <td>{item.domain}</td>
+                      <td>{item.category}</td>
+                    </tr>
+                  ))}
+                </tbody>
             </header>
         </div>
     </div>
